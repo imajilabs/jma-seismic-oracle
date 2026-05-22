@@ -1,0 +1,8 @@
+[package]
+name = "jma_seismic_oracle"
+edition = "2024"
+license = "Apache-2.0"
+authors = ["imajilabs (bl@sm.xyz)"]
+
+[dependencies]
+kagi = { git = "https://github.com/unconfirmedlabs/kagi.git", subdir = "move", rev = "main" }

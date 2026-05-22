@@ -1,0 +1,19 @@
+{
+  "name": "jma-seismic-oracle",
+  "private": true,
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imajilabs/jma-seismic-oracle.git"
+  },
+  "workspaces": ["packages/*", "services/*"],
+  "scripts": {
+    "test": "bun run --cwd packages/jma test",
+    "jma:test": "bun run --cwd packages/jma test",
+    "jma:typecheck": "bun run --cwd packages/jma typecheck",
+    "ingest:dev": "bun run --cwd services/jma-ingest dev",
+    "ingest:probe": "bun run --cwd services/jma-ingest probe",
+    "ingest:typecheck": "bun run --cwd services/jma-ingest typecheck",
+    "move:test": "sui move test --path move/jma_seismic_oracle --build-env mainnet"
+  }
+}

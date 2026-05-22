@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://xml.kishou.go.jp/jmaxml1/" xmlns:jmx="http://xml.kishou.go.jp/jmaxml1/">
+<Control>
+<Title>震源・震度に関する情報</Title>
+<DateTime>2026-04-26T22:48:26Z</DateTime>
+<Status>通常</Status>
+<EditorialOffice>気象庁本庁</EditorialOffice>
+<PublishingOffice>気象庁</PublishingOffice>
+</Control>
+<Head xmlns="http://xml.kishou.go.jp/jmaxml1/informationBasis1/">
+<Title>震源・震度情報</Title>
+<ReportDateTime>2026-04-27T07:48:00+09:00</ReportDateTime>
+<TargetDateTime>2026-04-27T07:48:00+09:00</TargetDateTime>
+<EventID>20260427074516</EventID>
+<InfoType>発表</InfoType>
+<Serial>1</Serial>
+<InfoKind>地震情報</InfoKind>
+<InfoKindVersion>1.0_1</InfoKindVersion>
+<Headline>
+<Text>２７日０７時４５分ころ、地震がありました。</Text>
+<Information type="震源・震度に関する情報（細分区域）">
+<Item>
+<Kind><Name>震度３</Name></Kind>
+<Areas codeType="地震情報／細分区域">
+<Area><Name>長野県北部</Name><Code>420</Code></Area>
+</Areas>
+</Item>
+</Information>
+<Information type="震源・震度に関する情報（市町村等）">
+<Item>
+<Kind><Name>震度３</Name></Kind>
+<Areas codeType="気象・地震・火山情報／市町村等">
+<Area><Name>大町市</Name><Code>2021200</Code></Area>
+</Areas>
+</Item>
+</Information>
+</Headline>
+</Head>
+<Body xmlns="http://xml.kishou.go.jp/jmaxml1/body/seismology1/" xmlns:jmx_eb="http://xml.kishou.go.jp/jmaxml1/elementBasis1/">
+<Earthquake>
+<OriginTime>2026-04-27T07:45:00+09:00</OriginTime>
+<ArrivalTime>2026-04-27T07:45:00+09:00</ArrivalTime>
+<Hypocenter>
+<Area>
+<Name>長野県北部</Name>
+<Code type="震央地名">420</Code>
+<jmx_eb:Coordinate description="北緯３６．６度　東経１３７．９度　深さ　１０ｋｍ" >+36.6+137.9-10000/</jmx_eb:Coordinate>
+</Area>
+</Hypocenter>
+<jmx_eb:Magnitude type="Mj" description="Ｍ３．２">3.2</jmx_eb:Magnitude>
+</Earthquake>
+<Intensity>
+<Observation>
+<CodeDefine>
+<Type xpath="Pref/Code">地震情報／都道府県等</Type>
+<Type xpath="Pref/Area/Code">地震情報／細分区域</Type>
+<Type xpath="Pref/Area/City/Code">気象・地震・火山情報／市町村等</Type>
+<Type xpath="Pref/Area/City/IntensityStation/Code">震度観測点</Type>
+</CodeDefine>
+<MaxInt>3</MaxInt>
+<Pref><Name>長野県</Name><Code>20</Code><MaxInt>3</MaxInt>
+<Area><Name>長野県北部</Name><Code>420</Code><MaxInt>3</MaxInt>
+<City><Name>大町市</Name><Code>2021200</Code><MaxInt>3</MaxInt>
+<IntensityStation><Name>大町市役所</Name><Code>2021200</Code><Int>3</Int></IntensityStation>
+<IntensityStation><Name>大町市美麻＊</Name><Code>2021240</Code><Int>3</Int></IntensityStation>
+<IntensityStation><Name>大町市大町図書館＊</Name><Code>2021220</Code><Int>2</Int></IntensityStation>
+<IntensityStation><Name>大町市八坂＊</Name><Code>2021230</Code><Int>2</Int></IntensityStation>
+</City>
+<City><Name>長野市</Name><Code>2020100</Code><MaxInt>2</MaxInt>
+<IntensityStation><Name>長野市信州新町新町＊</Name><Code>2020137</Code><Int>2</Int></IntensityStation>
+<IntensityStation><Name>長野市大岡＊</Name><Code>2020135</Code><Int>1</Int></IntensityStation>
+</City>
+<City><Name>松川村</Name><Code>2048200</Code><MaxInt>2</MaxInt>
+<IntensityStation><Name>松川村役場＊</Name><Code>2048230</Code><Int>2</Int></IntensityStation>
+</City>
+<City><Name>小川村</Name><Code>2058800</Code><MaxInt>2</MaxInt>
+<IntensityStation><Name>小川村高府＊</Name><Code>2058830</Code><Int>2</Int></IntensityStation>
+</City>
+<City><Name>千曲市</Name><Code>2021800</Code><MaxInt>1</MaxInt>
+<IntensityStation><Name>千曲市上山田温泉＊</Name><Code>2021831</Code><Int>1</Int></IntensityStation>
+</City>
+<City><Name>長野池田町</Name><Code>2048100</Code><MaxInt>1</MaxInt>
+<IntensityStation><Name>長野池田町池田＊</Name><Code>2048130</Code><Int>1</Int></IntensityStation>
+</City>
+<City><Name>坂城町</Name><Code>2052100</Code><MaxInt>1</MaxInt>
+<IntensityStation><Name>坂城町坂城＊</Name><Code>2052130</Code><Int>1</Int></IntensityStation>
+</City>
+</Area>
+<Area><Name>長野県中部</Name><Code>421</Code><MaxInt>1</MaxInt>
+<City><Name>安曇野市</Name><Code>2022000</Code><MaxInt>1</MaxInt>
+<IntensityStation><Name>安曇野市穂高支所</Name><Code>2022001</Code><Int>1</Int></IntensityStation>
+<IntensityStation><Name>安曇野市穂高福祉センター＊</Name><Code>2022020</Code><Int>1</Int></IntensityStation>
+<IntensityStation><Name>安曇野市堀金＊</Name><Code>2022033</Code><Int>1</Int></IntensityStation>
+</City>
+<City><Name>生坂村</Name><Code>2044800</Code><MaxInt>1</MaxInt>
+<IntensityStation><Name>生坂村役場＊</Name><Code>2044830</Code><Int>1</Int></IntensityStation>
+</City>
+<City><Name>筑北村</Name><Code>2045200</Code><MaxInt>1</MaxInt>
+<IntensityStation><Name>筑北村坂井</Name><Code>2045201</Code><Int>1</Int></IntensityStation>
+<IntensityStation><Name>筑北村西条＊</Name><Code>2045230</Code><Int>1</Int></IntensityStation>
+<IntensityStation><Name>筑北村坂北＊</Name><Code>2045231</Code><Int>1</Int></IntensityStation>
+</City>
+</Area>
+</Pref>
+</Observation>
+</Intensity>
+<Comments>
+<ForecastComment codeType="固定付加文">
+<Text>この地震による津波の心配はありません。</Text>
+<Code>0215</Code>
+</ForecastComment>
+<VarComment codeType="固定付加文">
+<Text>＊印は気象庁以外の震度観測点についての情報です。</Text>
+<Code>0262</Code>
+</VarComment>
+</Comments>
+</Body>
+</Report>
