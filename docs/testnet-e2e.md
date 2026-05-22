@@ -1,22 +1,33 @@
 # Testnet E2E Attestation
 
 This document records the first public end-to-end testnet proof for
-`jma_seismic_oracle`.
+`jma_seismic_oracle` using a real Walrus source blob id.
 
 ## Summary
 
-On May 22, 2026, a temporary AWS Nitro Enclave parsed a live JMA VXSE53
-earthquake report, signed the canonical `TriggerPayload`, registered through
-kagi, and emitted a Sui testnet `TriggerAttested` event.
+On May 22, 2026, a temporary AWS Nitro Enclave signed a canonical
+`TriggerPayload` derived from a live JMA VXSE53 earthquake report. The raw source
+XML was stored on Walrus mainnet, kagi registered the enclave from its Nitro
+attestation document, and Sui testnet emitted a `TriggerAttested` event.
 
 - Trigger attestation transaction:
-  [`AwnENjXH33DtkvmdiNk5PRPeAWAofA1H9ZvXcacji6Qt`](https://suiexplorer.com/txblock/AwnENjXH33DtkvmdiNk5PRPeAWAofA1H9ZvXcacji6Qt?network=testnet)
+  [`Bcobe2wZTGhD9kGbwAbmSKXghT8TUApf1zwS9woREWVw`](https://suivision.xyz/txblock/Bcobe2wZTGhD9kGbwAbmSKXghT8TUApf1zwS9woREWVw?network=testnet)
 - JMA source report:
   <https://www.data.jma.go.jp/developer/xml/data/20260522062513_0_VXSE53_010000.xml>
+- Walrus blob id:
+  `PfjhcGDgPysLCxkZKmUY0n3177B1MnMDYJ2xwt1zmtc`
+- Walrus blob id bytes:
+  `3df8e17060e03f2b0b0b19192a6518d27df5efb075327303609db1c2dd739ad7`
+- Walrus storage object:
+  `0x9aaa5838ec0acbfc023f6a6645ebff236bf9889f9f7a6989600022fd87af540c`
 - Report id: `20260522062513_0_VXSE53_010000`
 - JMA event id: `20260522152219`
-- Attestation object:
-  `0xdd8d3f3cedda908dee948631934c31d9ffaa3123c1e461044a59dfb58c1b1647`
+- Trigger attestation object:
+  `0xb4ddb61b5e88ced02b4a05cd0716776b63a4a75e4dcc5da479712120aad86356`
+
+The on-chain `source_xml_blob` stores the deterministic 32-byte Walrus blob id.
+The Sui `Blob` object id is listed only as storage metadata; it is not the source
+identifier signed by the enclave.
 
 ## JMA Source Facts
 
@@ -55,39 +66,39 @@ which matches the JMA `Head/EventID`.
 - kagi `EnclavePolicy<JMA_SEISMIC_ORACLE>`:
   `0x0fc581733ef2422906b7bf59353c677a91702bb6975204a4e01a3821e8b6104d`
 - kagi `Enclave<JMA_SEISMIC_ORACLE>`:
-  `0x153e23828a23e489324ecb39a6458734aa484f5a12fc8dc36d67b86abab68801`
+  `0xdfcdd6cb8bf7cb59a687d8cef0691e4dc99208eed1b3d32ba6f65e9c7838eaa1`
 - Oracle:
-  `0x77934e19f4d2f12a4ab05f9f63625c703085e2939d76eb92e2d3e9bfb598f678`
+  `0xa378900eb0abc6718ab854522b53d3b6072dab2f494f2a65cbf38621607d9616`
 - Trigger attestation:
-  `0xdd8d3f3cedda908dee948631934c31d9ffaa3123c1e461044a59dfb58c1b1647`
+  `0xb4ddb61b5e88ced02b4a05cd0716776b63a4a75e4dcc5da479712120aad86356`
 
 ## Transaction Trail
 
 - Package publish:
   `GXLKBTUYpJsBtnX4aRT3QHDM5cLy8mmeY2o8nhaiph9H`
-- PCR policy update:
-  `AQLy1Zp3bK2VcwyVeNrNsET2CuZHrHPb9WoZNFR2rQ1p`
+- PCR policy update with raw PCR bytes:
+  `K2XL1BNRu4fcqdecpdmkSU7AVQiBRKYPv9TkcSJJqGQ`
 - Enclave registration:
-  `3YqgzSppUMfebvpzucycow4WztVBEuiuuLGuiDRzsbwy`
+  `EvuVDddGAqcccfhSmsfqyxEED6HHbPLf22awUqBbLdCJ`
 - Oracle creation:
-  `H7n9wETmW7ADqybaAUgGrPeYeRxd34oMJL7f5cXG6jqg`
+  `BejduCTV1rkFVm27gMbcomHhgu3gC4qSaavQUdU3o3hX`
 - Trigger attestation:
-  `AwnENjXH33DtkvmdiNk5PRPeAWAofA1H9ZvXcacji6Qt`
+  `Bcobe2wZTGhD9kGbwAbmSKXghT8TUApf1zwS9woREWVw`
 
 ## Nitro Measurements
 
 The E2E signer ran as a non-debug Nitro Enclave with these measurements:
 
 ```text
-PCR0 092b395daf85706588b36a3eccde0ed0dc07b68465bb13d182fbb8d40040bde2df69555fb51398bf94db554ea8627de8
+PCR0 ea71f9dca4122a1d22c5da0baffb351e4dad95e0e946fd61aa6d66024617ec9d57d345fcea2d87d32c870484017200c7
 PCR1 4b4d5b3661b3efc12920900c80e126e4ce783c522de6c02a2a5bf7af3a2b9327b86776f188e4be1c1c404a129dbda493
-PCR2 8fc9278fa3b51c237e0991f6f2516571ec4d274dd287be0d880b59f5b9bb81d483ac89ec36b384cd4da0164a0d0a2ddc
+PCR2 c68da48b3e64b99b81cfb0c127fe01f9a28a390e43c49886bb7118faa10e4da35af9abbca4a6a4a8b2f48b34ed46651e
 ```
 
 The enclave public key registered through kagi was:
 
 ```text
-c0bad4c09c854c7c1e3393eeee55946d6f3a3d1971cb39275a0f11f70dea6f5d
+5a1873ebdef64f2fc331d12b01b62ae44af959a2ccec07e0be02526ebcc981d6
 ```
 
 ## Signed Payload
@@ -104,12 +115,18 @@ The enclave signed an `IntentMessage<TriggerPayload>` with:
 - longitude: `141.8`
 - depth: `10 km`
 - magnitude: `Mj 3.4`
+- source XML blob id:
+  `PfjhcGDgPysLCxkZKmUY0n3177B1MnMDYJ2xwt1zmtc`
+- source XML blob id bytes:
+  `3df8e17060e03f2b0b0b19192a6518d27df5efb075327303609db1c2dd739ad7`
 - source XML SHA-256:
   `b6be6592bc0bcc932d48612d42b805268e4afe15aeefba7bf47a9e8321fd93c9`
 
-The testnet proof used that same 32-byte SHA-256 value as `source_xml_blob`.
-Production deployments should write the JMA XML to the configured blob store and
-sign the actual blob id plus the SHA-256 content hash.
+The full signed intent BCS hash was:
+
+```text
+86938cf4adc79be5ba4aba90bb6ab3b31bcabfa258bd48347c5fd48063505eae
+```
 
 ## Verification Commands
 
