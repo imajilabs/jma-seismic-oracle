@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#04070d" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Shindochain · on-chain seismic attestations</title>
+  <meta name="description" content="A live 3D globe showing every earthquake the JMA seismic oracle has attested to the Sui blockchain. Each pulse is a tamper-proof attestation; each arc shows estimated impact." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Display: Fraunces variable serif (editorial, high opsz contrast).
+       Body:    IBM Plex Sans JP — technical and Japanese-aware, mirrors the JMA data.
+       Data:    JetBrains Mono — characterful tabular figures. -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans+JP:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="preconnect" href="https://fullnode.testnet.sui.io" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://esm.sh" crossorigin />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+  <!-- Discover the heavy globe.gl module and its peers as early as possible so
+       the browser can start fetching them in parallel with the HTML parse,
+       collapsing the cold-start waterfall by ~500-1000ms on slow networks. -->
+  <link rel="modulepreload" href="https://esm.sh/globe.gl@2.32.1" crossorigin />
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json" as="fetch" crossorigin />
+  <link rel="modulepreload" href="./app.js" />
+  <link rel="modulepreload" href="./data.js" />
+  <link rel="modulepreload" href="./sui.js" />
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="stars" aria-hidden="true"></div>
+  <div id="globe"></div>
+
+  <!-- Instrument bezel: hairline tick scale, like a seismometer chart edge -->
+  <div class="bezel-ticks" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <header class="top" role="banner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="32" height="32">
+          <circle cx="16" cy="16" r="13.5" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.35"/>
+          <circle cx="16" cy="16" r="9"    fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.55"/>
+          <circle cx="16" cy="16" r="4.5"  fill="none" stroke="currentColor" stroke-width="0.8"/>
+          <line x1="16" y1="2"  x2="16" y2="7"  stroke="currentColor" stroke-width="0.6"/>
+          <line x1="16" y1="25" x2="16" y2="30" stroke="currentColor" stroke-width="0.6"/>
+          <line x1="2"  y1="16" x2="7"  y2="16" stroke="currentColor" stroke-width="0.6"/>
+          <line x1="25" y1="16" x2="30" y2="16" stroke="currentColor" stroke-width="0.6"/>
+          <circle cx="16" cy="16" r="1.4" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-name">Shindochain</span>
+    </div>
+    <button class="icon-btn js-info" aria-label="About" type="button" id="info-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="8" r="0.6" fill="currentColor"/>
+      </svg>
+    </button>
+    <nav class="top-nav" aria-label="primary">
+      <a href="https://testnet.suivision.xyz/package/0xd5b734ff48a3361c6882b21ed82b7903bf411ef29dc12acc407d4b127f9a2526" target="_blank" rel="noopener">Contract</a>
+      <a href="https://testnet.suivision.xyz/txblock/AwnENjXH33DtkvmdiNk5PRPeAWAofA1H9ZvXcacji6Qt?tab=Events" target="_blank" rel="noopener">Genesis tx</a>
+      <a href="#about" class="js-info">About</a>
+    </nav>
+  </header>
+
+  <!-- Hero panel (desktop side panel; mobile slide-up overlay) -->
+  <aside class="hero panel" id="hero" aria-labelledby="hero-title">
+    <button class="panel-close" id="hero-close" aria-label="Close" type="button">×</button>
+    <div class="panel-title"><span class="dot"></span> <span class="ja">震</span> · sui testnet · live</div>
+    <h1 id="hero-title"><span>Earthquakes,</span> <em>witnessed</em> <span>on-chain.</span></h1>
+    <p>
+      Every tremor the JMA reports is attested by a confidential enclave and notarised
+      to Sui as a <code>TriggerAttestation</code> — tamper-proof, queryable, immutable.
+    </p>
+    <div class="stats" role="group" aria-label="oracle stats">
+      <div class="stat"><div class="stat-v" id="stat-total">0</div><div class="stat-k">Attestations</div></div>
+      <div class="stat"><div class="stat-v" id="stat-mag">—</div><div class="stat-k">Peak mag</div></div>
+      <div class="stat"><div class="stat-v" id="stat-shindo">—</div><div class="stat-k">Max <span class="ja">震度</span></div></div>
+    </div>
+  </aside>
+
+  <!-- Bottom sheet / desktop events panel -->
+  <aside class="sheet panel" id="sheet" aria-labelledby="events-title" data-state="default">
+    <button class="sheet-handle" id="sheet-handle" aria-label="Drag or tap to expand cases" type="button"><span></span></button>
+
+    <!-- Compact peek: visible at all states on mobile -->
+    <div class="sheet-peek">
+      <div class="panel-title" id="events-title">
+        <span class="dot"></span> Cases · <span id="event-count">0</span>
+      </div>
+      <div class="sheet-peek-summary" id="sheet-summary">—</div>
+    </div>
+
+    <!-- Mobile-only inline stats + condensed hero blurb (shown when expanded) -->
+    <div class="sheet-inline-hero">
+      <p class="sheet-blurb">JMA earthquakes, witnessed by a confidential enclave and notarised to Sui as tamper-proof attestations.</p>
+      <div class="stats" aria-hidden="true">
+        <div class="stat"><div class="stat-v" id="stat-total-m">0</div><div class="stat-k">Attestations</div></div>
+        <div class="stat"><div class="stat-v" id="stat-mag-m">—</div><div class="stat-k">Peak mag</div></div>
+        <div class="stat"><div class="stat-v" id="stat-shindo-m">—</div><div class="stat-k">Latest shindo</div></div>
+      </div>
+    </div>
+
+    <div class="events-list" id="event-list"></div>
+  </aside>
+
+  <!-- Detail panel (right on desktop, full-screen sheet on mobile) -->
+  <aside class="detail panel" id="detail" aria-live="polite"></aside>
+
+  <!-- Live seismograph trace — a real-time ticker that pulses on new attestations -->
+  <svg class="seismo" viewBox="0 0 1200 36" preserveAspectRatio="none" aria-hidden="true">
+    <path id="seismo-path" d="M 0 18 L 1200 18" fill="none" stroke="currentColor" stroke-width="1" />
+  </svg>
+
+  <!-- Vertical timestamp ribbon (tate-gaki feel) -->
+  <div class="vstamp" id="vstamp" aria-hidden="true">
+    <span class="vstamp-l">SOURCE</span>
+    <span class="vstamp-id">—</span>
+    <span class="vstamp-l">震源</span>
+  </div>
+
+  <!-- Live status pill -->
+  <div class="live">
+    <span class="live-pill" id="live-pill"><span class="dot"></span> connecting…</span>
+  </div>
+
+  <!-- Shindo legend (collapses to chip on small screens) -->
+  <button class="legend" id="legend" type="button" aria-expanded="true" aria-label="Shindo intensity scale">
+    <span class="legend-end">0</span>
+    <div class="legend-scale" id="legend-scale"></div>
+    <span class="legend-end">7</span>
+    <span class="legend-label">JMA Shindo</span>
+  </button>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
