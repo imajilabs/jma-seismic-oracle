@@ -1,0 +1,16 @@
+{
+  "name": "@imajilabs/seismic-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "description": "Static landing page that visualises TriggerAttested events from the jma-seismic-oracle Sui Move package on a 3D globe.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imajilabs/jma-seismic-oracle.git",
+    "directory": "packages/explorer"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 7878"
+  }
+}
